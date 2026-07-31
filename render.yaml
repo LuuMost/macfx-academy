@@ -1,0 +1,20 @@
+# Render Blueprint — auto-configures the whole service on render.com
+services:
+  - name: macfx-academy
+    type: web
+    runtime: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app:app
+    envVars:
+      - key: SECRET_KEY
+        generateValue: true        # Render creates a strong secret automatically
+      - key: PYTHON_VERSION
+        value: "3.13.3"
+      # When you have Paystack keys, add them in Render → Environment:
+      # - key: PAYSTACK_PUBLIC_KEY
+      #   sync: false
+      # - key: PAYSTACK_SECRET_KEY
+      #   sync: false
+      # - key: PAYSTACK_PLAN_CODE
+      #   sync: false
