@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}Create your account — Mac FX Academy{% endblock %}
+{% block content %}
+<section class="section auth">
+  <div class="auth__card reveal">
+    <p class="eyebrow">// Step 1 of 2</p>
+    <h1 class="auth__title">Create your account</h1>
+    <p class="auth__sub">Register, then activate your R500/month membership on the next screen.</p>
+    <form method="post" class="form">
+      <label class="form__label">Full name
+        <input type="text" name="name" class="form__input" placeholder="Your name" required autofocus />
+      </label>
+      <label class="form__label">Email address
+        <input type="email" name="email" class="form__input" placeholder="you@example.com" required />
+      </label>
+      <label class="form__label">Password <span class="form__hint">(min. 8 characters)</span>
+        <input type="password" name="password" class="form__input" placeholder="••••••••" minlength="8" required />
+      </label>
+      <label class="form__label">Confirm password
+        <input type="password" name="confirm" class="form__input" placeholder="••••••••" minlength="8" required />
+      </label>
+      <button type="submit" class="btn btn--gold btn--block">Create account →</button>
+    </form>
+    <p class="auth__alt">Already have an account? <a href="{{ url_for('login') }}">Log in</a></p>
+    <p class="auth__fine">By registering you agree that all Academy content is educational and not financial advice.</p>
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% block title %}Dashboard — Mac FX Academy{% endblock %}
+{% block content %}
+<section class="section container">
+  <header class="dash__header reveal">
+    <div>
+      <p class="eyebrow">// Member dashboard</p>
+      <h1 class="section__title">Sharp sharp, {{ g.user['name'].split(' ')[0] }} 👋</h1>
+      <p class="section__lead">{{ g.user['email'] }}</p>
+    </div>
+  </header>
+
+  <div class="dash__grid">
+
+    <!-- Membership status -->
+    <article class="dash-card reveal">
+      <h2 class="dash-card__title">Membership</h2>
+      {% if sub %}
+        <p class="status status--active">● ACTIVE</p>
+        <p class="dash-card__big">{{ sub['plan'] }}</p>
+        <dl class="dash-card__meta">
+          <div><dt>Monthly fee</dt><dd>{{ sub['amount']|rand }}</dd></div>
+          <div><dt>Member since</dt><dd>{{ sub['started_at'][:10] }}</dd></div>
+          <div><dt>Next billing</dt><dd>{{ sub['next_billing_at'][:10] }}</dd></div>
+        </dl>
+        <a href="{{ url_for('signals') }}" class="btn btn--gold btn--small">Open signals feed →</a>
+      {% else %}
+        <p class="status status--inactive">● NOT ACTIVE</p>
+        <p class="dash-card__big">Unlock the Academy</p>
+        <p class="dash-card__text">Subscribe to get daily signals, weekly mentorship and the private community.</p>
+        <a href="{{ url_for('checkout', kind='subscription') }}" class="btn btn--gold btn--small">Subscribe — R500/month →</a>
+      {% endif %}
+    </article>
+
+    <!-- Quick links -->
+    <article class="dash-card reveal">
+      <h2 class="dash-card__title">Quick links</h2>
+      <ul class="dash-links">
+        <li><a href="{{ url_for('signals') }}">📡 &nbsp;Signals feed {% if not sub %}<span class="lock">🔒 members only</span>{% endif %}</a></li>
+        <li><a href="https://wa.me/27724146493" target="_blank" rel="noopener">💬 &nbsp;WhatsApp support</a></li>
+        <li><a href="{{ url_for('store') }}">🤖 &nbsp;Trading bot store</a></li>
+        <li><a href="mailto:makungu377@gmail.com">✉️ &nbsp;Email the Academy</a></li>
+      </ul>
+    </article>
+
+    <!-- Owned bots -->
+    <article class="dash-card dash-card--wide reveal">
+      <h2 class="dash-card__title">My trading bots</h2>
+      {% if owned %}
+        <div class="owned">
+          {% for bot in owned %}
+            <div class="owned__item">
+              <div>
+                <p class="owned__name">{{ bot['name'] }}</p>
+                <p class="owned__meta">Purchased {{ bot['created_at'][:10] }} · {{ bot['price']|rand }}</p>
+              </div>
+              <span class="owned__badge">⬇ Download in your delivery email</span>
+            </div>
+          {% endfor %}
+        </div>
+      {% else %}
+        <p class="dash-card__text">You haven't bought any bots yet. Automate your trading with our MT5 expert advisors.</p>
+        <div class="owned__suggestions">
+          {% for b in bots %}
+            <a href="{{ url_for('store') }}" class="mini-bot"><span>🤖</span> {{ b['name'] }} — {{ b['price']|rand }}</a>
+          {% endfor %}
+        </div>
+      {% endif %}
+    </article>
+
+  </div>
+</section>
+{% endblock %}

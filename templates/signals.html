@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}Signals feed — Mac FX Academy{% endblock %}
+{% block content %}
+<section class="section container">
+  <header class="section__header reveal">
+    <p class="eyebrow">// Members only</p>
+    <h1 class="section__title">Signals feed</h1>
+    <p class="section__lead">
+      Latest setups from the Academy desk. Signals are educational guidance —
+      always apply your own risk management. Risk 1–2% per trade, never more.
+    </p>
+  </header>
+
+  <div class="signals reveal">
+    <div class="signals__head signals__row">
+      <span>Pair</span><span>Direction</span><span>Entry</span><span>Stop Loss</span><span>Take Profit</span><span class="hide-m">Breakdown</span>
+    </div>
+    {% for s in rows %}
+    <div class="signals__row">
+      <span class="signals__pair">{{ s['pair'] }}</span>
+      <span class="dir dir--{{ s['direction']|lower }}">{{ '▲' if s['direction'] == 'BUY' else '▼' }} {{ s['direction'] }}</span>
+      <span>{{ s['entry'] }}</span>
+      <span class="sl">{{ s['sl'] }}</span>
+      <span class="tp">{{ s['tp'] }}</span>
+      <span class="signals__note hide-m">{{ s['note'] }}</span>
+    </div>
+    {% endfor %}
+  </div>
+
+  <p class="signals__foot reveal">Posted {{ rows[0]['created_at'] if rows else '' }} UTC · Sample feed — live signals post here daily for active members.</p>
+</section>
+{% endblock %}

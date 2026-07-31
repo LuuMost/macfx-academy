@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block title %}Trading Bots — Mac FX Academy{% endblock %}
+{% block content %}
+<section class="section container">
+  <header class="section__header section__header--center reveal">
+    <p class="eyebrow">// Bot store</p>
+    <h1 class="section__title">MAC FX Trading Robots</h1>
+    <p class="section__lead">
+      MT5 expert advisors built by the Academy. Once-off purchase, lifetime license,
+      free setup guide included. Bots are delivered to your email after checkout.
+    </p>
+  </header>
+
+  <div class="bots">
+    {% for p in products %}
+    <article class="bot reveal">
+      <div class="bot__art" aria-hidden="true">
+        {% if 'gold' in p['slug'] %}⚡{% elif 'trend' in p['slug'] %}📈{% else %}🛡{% endif %}
+      </div>
+      <h2 class="bot__name">{{ p['name'] }}</h2>
+      <p class="bot__blurb">{{ p['blurb'] }}</p>
+      <ul class="bot__features">
+        {% for f in p['features'].split('|') %}
+        <li>{{ f }}</li>
+        {% endfor %}
+      </ul>
+      <div class="bot__foot">
+        <p class="bot__price">{{ p['price']|rand }} <span>once-off</span></p>
+        {% if p['id'] in owned_ids %}
+          <span class="btn btn--owned">✓ Owned</span>
+        {% else %}
+          <a href="{{ url_for('checkout', kind='product-%d' % p['id']) }}" class="btn btn--gold">Buy now</a>
+        {% endif %}
+      </div>
+    </article>
+    {% endfor %}
+  </div>
+
+  <p class="bots__note reveal">
+    ⚠️ Trading bots execute automated strategies and can lose money. Test every robot on a
+    demo account first. No bot guarantees profits — see the risk disclaimer below.
+  </p>
+</section>
+{% endblock %}

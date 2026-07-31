@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block title %}Log in — Mac FX Academy{% endblock %}
+{% block content %}
+<section class="section auth">
+  <div class="auth__card reveal">
+    <h1 class="auth__title">Welcome back</h1>
+    <p class="auth__sub">Log in to access your dashboard, signals and bots.</p>
+    <form method="post" class="form">
+      <label class="form__label">Email address
+        <input type="email" name="email" class="form__input" placeholder="you@example.com" required autofocus />
+      </label>
+      <label class="form__label">Password
+        <input type="password" name="password" class="form__input" placeholder="••••••••" required />
+      </label>
+      <button type="submit" class="btn btn--gold btn--block">Log in</button>
+    </form>
+    <p class="auth__alt">New to the Academy? <a href="{{ url_for('register') }}">Create an account</a></p>
+  </div>
+</section>
+{% endblock %}

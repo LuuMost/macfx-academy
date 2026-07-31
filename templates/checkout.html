@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% block title %}Checkout — Mac FX Academy{% endblock %}
+{% block content %}
+<section class="section auth">
+  <div class="auth__card auth__card--wide reveal">
+    <p class="eyebrow">// {{ 'Step 2 of 2' if item.kind == 'subscription' else 'Checkout' }}</p>
+    <h1 class="auth__title">Confirm your order</h1>
+
+    <div class="order">
+      <div class="order__row">
+        <span>{{ item.name }}</span>
+        <strong>{{ item.amount|rand }}</strong>
+      </div>
+      {% if item.kind == 'subscription' %}
+      <p class="order__note">Recurring monthly · activates immediately after payment.</p>
+      {% endif %}
+    </div>
+
+    {% if paystack_key %}
+      <!-- ============ LIVE MODE: real Paystack popup (ZAR) ============ -->
+      <button id="payBtn" class="btn btn--gold btn--block btn--large">
+        Pay {{ item.amount|rand }} with Paystack
+      </button>
+      <p class="pay-note">🔒 Secure payment processed by Paystack.</p>
+      <script src="https://js.paystack.co/v1/inline.js"></script>
+      <script>
+        document.getElementById("payBtn").addEventListener("click", function () {
+          var meta = { purpose: "{{ 'subscription' if item.kind == 'subscription' else 'bot' }}" };
+          {% if product %}meta.product_id = "{{ product['id'] }}";{% endif %}
+          var handler = PaystackPop.setup({
+            key: "{{ paystack_key }}",
+            email: "{{ g.user['email'] }}",
+            amount: {{ item.amount }},
+            currency: "ZAR",
+            {% if item.kind == 'subscription' and plan_code %}plan: "{{ plan_code }}",{% endif %}
+            metadata: meta,
+            callback: function (response) {
+              window.location = "{{ url_for('payment_return') }}?reference=" + encodeURIComponent(response.reference) + "&kind={{ item.kind }}";
+            },
+            onClose: function () {}
+          });
+          handler.openIframe();
+        });
+      </script>
+    {% else %}
+      <!-- ============ DEMO MODE: simulated payment, no money moves ============ -->
+      <div class="demo-banner">🧪 DEMO MODE — no real payment will be made.
+        <small>Add Paystack keys to switch on live payments (see README).</small>
+      </div>
+      <form method="post" action="{{ url_for('pay_demo') }}" class="form">
+        <input type="hidden" name="kind" value="{{ item.kind }}" />
+        <label class="form__label">Card number
+          <input class="form__input" value="4242 4242 4242 4242" readonly />
+        </label>
+        <div class="form__row">
+          <label class="form__label">Expiry
+            <input class="form__input" value="12/28" readonly />
+          </label>
+          <label class="form__label">CVV
+            <input class="form__input" value="123" readonly />
+          </label>
+        </div>
+        <button type="submit" class="btn btn--gold btn--block btn--large">Pay {{ item.amount|rand }} (demo)</button>
+      </form>
+    {% endif %}
+
+    <p class="auth__alt"><a href="{{ url_for('dashboard') }}">← Back to dashboard</a></p>
+  </div>
+</section>
+{% endblock %}
